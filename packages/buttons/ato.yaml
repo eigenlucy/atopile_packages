@@ -16,12 +16,12 @@ builds:
     entry: buttons.ato:ButtonPullup90Degree
 
 package:
-  identifier: atopile/buttons
-  repository: https://github.com/atopile/packages
-  version: 0.1.0
+  identifier: eigenlucy/buttons
+  repository: https://github.com/eigenlucy/atopile_packages
+  version: 0.0.1
   authors:
-  - name: atopile
-    email: hi@atopile.io
-  summary: A collection of buttons for convenience
+  - name: lucy moglia
+    email: eigenlucy@proton.me
+  summary: A collection of buttons for convenience. Forked from atopile/buttons
   license: MIT
-  homepage: https://github.com/atopile/packages
+  homepage: https://github.com/eigenlucy/packages

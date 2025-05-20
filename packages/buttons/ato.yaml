@@ -1,0 +1,27 @@
+requires-atopile: '>=0.3.0'
+
+paths:
+  src: .
+  layout: ./layouts
+  footprints: ./footprints
+
+builds:
+  ref-button-pullup:
+    entry: buttons.ato:ButtonPullup
+
+  ref-button-pulldown:
+    entry: buttons.ato:ButtonPulldown
+
+  ref-button-pullup90degree:
+    entry: buttons.ato:ButtonPullup90Degree
+
+package:
+  identifier: atopile/buttons
+  repository: https://github.com/atopile/packages
+  version: 0.1.0
+  authors:
+  - name: atopile
+    email: hi@atopile.io
+  summary: A collection of buttons for convenience
+  license: MIT
+  homepage: https://github.com/atopile/packages

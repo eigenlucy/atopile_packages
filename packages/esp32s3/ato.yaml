@@ -22,5 +22,5 @@ package:
 
 dependencies:
 - type: registry
-  identifier: atopile/esp32s3
-  release: 0.1.0
+  identifier: eigenlucy/buttons
+  release: 0.0.1

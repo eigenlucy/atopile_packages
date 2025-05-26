@@ -1,3 +1,6 @@
 [submodule "e22900m22s"]
 	path = e22900m22s
-	url = git@github.com:eigenlucy/e22900m22s.git
+  url = git@github.com:eigenlucy/e22900m22s.git
+[submodule "e22900m30s"]
+	path = e22900m30s
+	url = git@github.com:eigenlucy/e22900m30s.git

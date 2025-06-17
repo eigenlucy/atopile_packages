@@ -1,0 +1,112 @@
+#pragma experiment("BRIDGE_CONNECT")
+#pragma experiment("FOR_LOOP")
+
+import ElectricPower
+import ElectricLogic
+import I2C
+import Capacitor
+import DifferentialPair
+import Resistor
+
+from "components/ti_addressor.py" import TIAddressor
+
+component Texas_Instruments_INA232x_package:
+    """TEXAS_INSTRUMENTS_INA232x component"""
+    manufacturer = "TEXAS INSTRUMENTS"
+    datasheet_url = "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2309210949_Texas-Instruments-INA232AIDDFR_C5447660.pdf"
+    lcsc_id = "C5447660"
+    mpn = "INA232AIDDFR"
+    # shunt_input_voltage = -81.9175mV to 81.9175mV # ADCRANGE = 0
+    # shunt_input_voltage = -20.4794mV to 20.48mV # ADCRANGE = 1
+    shunt_input_voltage = 75mV
+
+    # pins
+    signal A0 ~ pin 7
+    signal ALERT ~ pin 8
+    signal GND ~ pin 3
+    signal IN_ ~ pin 2
+    signal INplus ~ pin 1
+    signal SCL ~ pin 5
+    signal SDA ~ pin 6
+    signal VS ~ pin 4
+
+
+module Texas_Instruments_INA232x_driver:
+    """Texas Instruments INA232x driver"""
+    package = new Texas_Instruments_INA232x_package
+
+    power = new ElectricPower
+    power.required = True
+    assert power.voltage within 1.7V to 5.5V
+    power.vcc ~ package.VS
+    power.gnd ~ package.GND
+
+    max_current: current
+
+
+    # i2c
+    i2c = new I2C
+    i2c.required = True
+    i2c.scl.line ~ package.SCL
+    i2c.sda.line ~ package.SDA
+
+    # alert
+    alert = new ElectricLogic
+    alert.line ~ package.ALERT
+
+    # shunt input
+    shunt_input = new DifferentialPair
+    shunt_input.p.line ~ package.INplus
+    shunt_input.n.line ~ package.IN_
+
+    # shunt resistor
+    shunt = new Resistor
+    shunt.package = "R1206"
+    shunt_input.p.line ~> shunt ~> shunt_input.n.line
+    assert shunt.resistance <= package.shunt_input_voltage / max_current * 1.1
+    assert shunt.resistance >= package.shunt_input_voltage / max_current * 0.9
+
+    # decoupling cap
+    decoupling_cap = new Capacitor
+    power.vcc ~> decoupling_cap ~> power.gnd
+    decoupling_cap.capacitance = 100nF +/- 10%
+    decoupling_cap.package = "C0402"
+
+    # addressor
+    addressor = new TIAddressor
+    addressor.i2c ~ i2c
+    addressor.address_line.line ~ package.A0
+    addressor.address_line.reference ~ power
+    assert addressor.base is 0x48
+    assert i2c.address is addressor.address
+
+
+module Test:
+    current_sensors = new Texas_Instruments_INA232x_driver[4]
+
+    current_sensors[0].i2c.address = 0x48
+    current_sensors[1].i2c.address = 0x49
+    current_sensors[2].i2c.address = 0x4A
+    current_sensors[3].i2c.address = 0x4B
+
+    current_sensors[0].max_current = 0.1A
+    current_sensors[1].max_current = 1A
+    current_sensors[2].max_current = 3A
+    current_sensors[3].max_current = 10A
+
+    power = new ElectricPower
+    i2c = new I2C
+
+    for sensor in current_sensors:
+        sensor.power ~ power
+        sensor.i2c ~ i2c
+
+    # Power to sense
+    power_source = new ElectricPower
+    power_sink = new ElectricPower
+
+    # High side sense (also able to sense voltage)
+    power_source.vcc ~> current_sensors[0].shunt ~> power_sink.vcc
+
+    # Low side sense
+    power_source.gnd ~> current_sensors[1].shunt ~> power_sink.gnd

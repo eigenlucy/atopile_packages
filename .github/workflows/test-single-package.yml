@@ -1,0 +1,36 @@
+name: Test Single Package
+
+on:
+  workflow_dispatch:
+    inputs:
+      package_path:
+        description: 'Relative path to the package directory from the repository root (e.g., my_package or group/my_package)'
+        required: true
+        type: string
+
+jobs:
+  test_one_package:
+    name: Test ${{ github.event.inputs.package_path }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read # If atopile needs to read GitHub packages as dependencies
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Atopile
+        uses: atopile/setup-atopile@v1
+        with:
+          version: "main" # Or a specific version if preferred
+
+      - name: Sync Package
+        id: sync
+        run: ato sync
+        working-directory: ${{ github.event.inputs.package_path }}
+
+      - name: Build Package
+        id: build
+        run: ato build
+        working-directory: ${{ github.event.inputs.package_path }}

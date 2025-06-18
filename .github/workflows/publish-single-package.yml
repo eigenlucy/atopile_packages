@@ -1,0 +1,33 @@
+name: Publish Single Package
+
+on:
+  workflow_dispatch:
+    inputs:
+      package_path:
+        description: 'Relative path to the package directory from the repository root (e.g., my_package or group/my_package)'
+        required: true
+        type: string
+
+jobs:
+  publish_one_package:
+    name: Publish ${{ github.event.inputs.package_path }}
+    runs-on: ubuntu-latest
+    # This condition ensures publishing only happens if you're on the main branch,
+    # mirroring the original workflow's intent for automated publishing.
+    # When manually dispatching, ensure you are on the 'main' branch if this restriction is desired.
+    if: ${{ github.ref == 'refs/heads/main' }}
+    permissions:
+      id-token: write # Required for publishing to registries using OIDC
+      contents: read  # Required to checkout the repository
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Publish Package using Atopile Action
+        uses: atopile/publish-package@v1
+        with:
+          atopile-version: "main" # Or a specific version
+          package-entrypoint: ${{ github.event.inputs.package_path }}
+          skip-duplicate-versions: true
+          # package-version: "" # Uses the embedded version key from ato.yaml by default

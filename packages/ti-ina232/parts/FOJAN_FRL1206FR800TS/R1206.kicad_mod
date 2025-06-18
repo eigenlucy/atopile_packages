@@ -1,0 +1,164 @@
+(footprint "FOJAN_FRL1206FR800TS:R1206"
+    (layer "F.Cu")
+    (descr "")
+    (version 20241229)
+    (generator "faebryk")
+    (generator_version "v5")
+    (tedit "5DC5F6A4")
+    (property "Reference" "REF**"
+        (at 0 -4 0)
+        (layer "F.SilkS")
+        (hide no)
+        (uuid "82907490-57d9-4d61-b9bc-98f27b443b6b")
+        (effects
+            (font
+                (size 1 1)
+                (thickness 0.15)
+            )
+        )
+    )
+    (property "Value" "R1206"
+        (at 0 4 0)
+        (layer "F.Fab")
+        (hide no)
+        (uuid "7ac3cbfd-173f-41a5-876e-1c625a00f31c")
+        (effects
+            (font
+                (size 1 1)
+                (thickness 0.15)
+            )
+        )
+    )
+    (property "checksum" "df9ea23308a40a47231db2a6497b1e68e789e2248d3f20f2ff9a4a4bc5bfb31e"
+        (at 0 0 0)
+        (layer "User.9")
+        (hide no)
+        (uuid "e462043f-1f24-4abd-b1d5-729f0af0d2d0")
+        (effects
+            (font
+                (size 0.125 0.125)
+                (thickness 0.01875)
+            )
+            (hide yes)
+        )
+    )
+    (attr through_hole)
+    (fp_line
+        (start 0.95 1.08)
+        (end 2.31 1.08)
+        (stroke
+            (width 0.15)
+            (type solid)
+        )
+        (layer "F.SilkS")
+        (uuid "2d2bc066-e587-4310-8172-627ddce1f5d2")
+    )
+    (fp_line
+        (start 2.31 1.08)
+        (end 2.31 -1.08)
+        (stroke
+            (width 0.15)
+            (type solid)
+        )
+        (layer "F.SilkS")
+        (uuid "f264bc17-2c8a-4031-8270-5a4c1c00b40f")
+    )
+    (fp_line
+        (start 2.31 -1.08)
+        (end 0.95 -1.08)
+        (stroke
+            (width 0.15)
+            (type solid)
+        )
+        (layer "F.SilkS")
+        (uuid "3bd40ff4-b8ea-45c5-8665-7645359c4dea")
+    )
+    (fp_line
+        (start -0.95 1.08)
+        (end -2.31 1.08)
+        (stroke
+            (width 0.15)
+            (type solid)
+        )
+        (layer "F.SilkS")
+        (uuid "a18f6afc-bcac-490a-b7f5-ecfb4a9865d8")
+    )
+    (fp_line
+        (start -2.31 1.08)
+        (end -2.31 -1.08)
+        (stroke
+            (width 0.15)
+            (type solid)
+        )
+        (layer "F.SilkS")
+        (uuid "a020acf5-f00f-4f41-b984-1d9f50c2b1b4")
+    )
+    (fp_line
+        (start -2.31 -1.08)
+        (end -0.95 -1.08)
+        (stroke
+            (width 0.15)
+            (type solid)
+        )
+        (layer "F.SilkS")
+        (uuid "c51cf78c-2600-4c0b-a71b-62422415bfb1")
+    )
+    (fp_circle
+        (center -1.55 0.79)
+        (end -1.52 0.79)
+        (stroke
+            (width 0.06)
+            (type solid)
+        )
+        (fill no)
+        (layer "F.Fab")
+        (uuid "a8ce9e16-745f-49ab-8bf2-37515a0ee0eb")
+    )
+    (fp_text user "%R"
+        (at 0 0 0)
+        (layer "F.Fab")
+        (uuid "d3700c1a-2ca4-4ed2-82b7-b345db31094f")
+        (effects
+            (font
+                (size 1 1)
+                (thickness 0.15)
+            )
+        )
+        (unlocked no)
+    )
+    (fp_text user "${REFERENCE}"
+        (at 0 -4 0)
+        (layer "F.SilkS")
+        (uuid "82907490-57d9-4d61-b9bc-98f27b443b6b")
+        (effects
+            (font
+                (size 1 1)
+                (thickness 0.15)
+            )
+        )
+        (unlocked no)
+    )
+    (pad "2" smd rect
+        (at 1.48 0 0)
+        (size 1.21 1.7)
+        (layers "F.Cu" "F.Paste" "F.Mask")
+        (uuid "36734f87-2069-4c82-9d7b-fc4f3e4bb6ee")
+    )
+    (pad "1" smd rect
+        (at -1.48 0 0)
+        (size 1.21 1.7)
+        (layers "F.Cu" "F.Paste" "F.Mask")
+        (uuid "6cdf18c5-d295-487d-890a-c0799e9cbf95")
+    )
+    (model "${KIPRJMOD}/../../parts/FOJAN_FRL1206FR800TS/R1206_L3.2-W1.6-H0.6.step"
+        (offset
+            (xyz -2.39 0.89 0)
+        )
+        (scale
+            (xyz 1 1 1)
+        )
+        (rotate
+            (xyz 0 0 0)
+        )
+    )
+)

@@ -1,0 +1,78 @@
+name: Publish All Packages in Order
+
+on:
+  workflow_dispatch: # Allows manual triggering
+  push:
+    branches:
+      - main # Or your primary branch for releases
+
+jobs:
+  determine_order:
+    name: Determine Package Publish Order
+    runs-on: ubuntu-latest
+    outputs:
+      package_matrix: ${{ steps.get_order.outputs.matrix }}
+      matrix_empty: ${{ steps.get_order.outputs.matrix_empty }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10' # Or your preferred Python version
+
+      - name: Install PyYAML dependency
+        run: pip install PyYAML
+
+      - name: Run script to determine package order
+        id: get_order
+        run: |
+          echo "Looking for script at .github/scripts/determine_package_order.py"
+          if [ ! -f ".github/scripts/determine_package_order.py" ]; then
+            echo "Error: determine_package_order.py not found!"
+            exit 1
+          fi
+          
+          order_string=$(python .github/scripts/determine_package_order.py)
+          
+          if [ -z "$order_string" ]; then
+            echo "Warning: Python script returned no package order. Possible cycle or no packages found."
+            echo "matrix=[]" >> $GITHUB_OUTPUT
+            echo "matrix_empty=true" >> $GITHUB_OUTPUT
+          else
+            # Convert newline-separated string to JSON array for matrix
+            # Filters out any empty lines that might occur
+            json_matrix=$(echo "$order_string" | jq --raw-input --slurp 'split("
+") | map(select(length > 0))')
+            echo "Determined package order matrix: $json_matrix"
+            echo "matrix=$json_matrix" >> $GITHUB_OUTPUT
+            echo "matrix_empty=false" >> $GITHUB_OUTPUT
+          fi
+
+  publish_ordered_packages:
+    name: Publish Ordered Packages
+    needs: determine_order
+    # Only run if matrix is not empty (i.e., order was determined and packages exist)
+    if: needs.determine_order.outputs.matrix_empty == 'false' && fromJson(needs.determine_order.outputs.package_matrix)[0] != null
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write   # Required for publishing to registries using OIDC
+      contents: read    # Required to checkout the repository
+    strategy:
+      matrix:
+        package_path: ${{ fromJson(needs.determine_order.outputs.package_matrix) }}
+      fail-fast: true # If one package fails, stop the rest. Set to 'false' to attempt all.
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Publish Package (${{ matrix.package_path }})
+        uses: atopile/publish-package@v1
+        with:
+          atopile-version: "main" # Or your desired atopile version
+          package-entrypoint: ${{ matrix.package_path }}
+          skip-duplicate-versions: true
+          # package-version: "" # Uses the embedded version key from ato.yaml by default

@@ -9,15 +9,3 @@ builds:
     entry: ti-ina232.ato:Texas_Instruments_INA232x_driver
   test:
     entry: ti-ina232.ato:Test
-
-# This metadata is only required for publishing
-# Uncomment it and fill out the fields to publish your package
-package:
-  identifier: atopile/ti-ina232
-  repository: https://github.com/atopile/packages
-  version: "0.1.1"
-  authors:
-    - name: atopile
-      email: hi@atopile.io
-  summary: Texas Instruments INA232x current sensor
-  license: MIT

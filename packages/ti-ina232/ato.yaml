@@ -9,3 +9,14 @@ builds:
     entry: ti-ina232.ato:Texas_Instruments_INA232x_driver
   test:
     entry: ti-ina232.ato:Test
+
+package:
+  identifier: eigenlucy/ti-ina232
+  repository: https://github.com/eigenlucy/atopile_packages
+  version: 0.1.0
+  authors:
+  - name: lucy moglia
+    email: eigenlucy@proton.me
+  summary: INA232 fork
+  license: MIT
+  homepage: https://github.com/eigenlucy/atopile_packages
